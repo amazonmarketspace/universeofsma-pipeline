@@ -1,0 +1,38 @@
+name: daily-video
+on:
+  schedule:
+    - cron: '30 2 * * *'      # 08:00 IST
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu
+      - run: pip install pyyaml pillow edge-tts google-api-python-client google-auth-oauthlib
+
+      - name: Pull products from Google Sheet
+        env:
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+        run: python3 src/from_sheet.py        # writes data/products.csv
+
+      - run: python3 src/build.py
+      - run: python3 src/narrate.py
+      - run: python3 src/render.py --format long
+      - run: python3 src/render.py --format short
+
+      - name: Upload to YouTube
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: python3 src/upload.py --privacy private
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-output
+          path: out/*/

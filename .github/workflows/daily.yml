@@ -18,6 +18,7 @@ jobs:
         env:
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+          GSHEET_TAB: "Sheet1"
         run: python3 src/from_sheet.py        # writes data/products.csv
 
       - run: python3 src/build.py

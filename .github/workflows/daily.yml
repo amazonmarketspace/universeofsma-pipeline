@@ -1,7 +1,7 @@
 name: daily-video
 on:
   schedule:
-    - cron: '30 2 * * *'      # 08:00 IST
+    - cron: '30 2 * * *'      # 08:00 IST every day
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
+
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu
+
       - run: pip install pyyaml pillow edge-tts google-api-python-client google-auth-oauthlib
 
       - name: Reset any in_progress rows to ready
@@ -19,28 +21,35 @@ jobs:
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
           GSHEET_TAB: "Sheet1"
-        run: python3 src/reset_sheet.py || true   # best-effort, don't fail pipeline
+        run: python3 src/reset_sheet.py || true
 
       - name: Pull products from Google Sheet
         env:
           GSHEET_ID: ${{ secrets.GSHEET_ID }}
           GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
           GSHEET_TAB: "Sheet1"
-        run: python3 src/from_sheet.py        # writes data/products.csv
+        run: python3 src/from_sheet.py
 
       - run: python3 src/build.py
-      - run: python3 src/narrate.py
-      - run: python3 src/render.py --format long
-      - run: python3 src/render.py --format short
 
-      - name: Upload to YouTube
+      - name: Generate Hindi narration
+        run: python3 src/narrate.py
+
+      - name: Render long-form video
+        run: python3 src/render.py --format long
+
+      - name: Render 5 Shorts
+        run: python3 src/render.py --format short --max-shorts 5
+
+      - name: Upload to YouTube (public, 1 long + 5 Shorts)
         env:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-        run: python3 src/upload.py --privacy private
+        run: python3 src/upload.py --privacy public --max-long 1 --max-short 5
 
       - uses: actions/upload-artifact@v4
         with:
-          name: video-output
+          name: video-output-${{ github.run_number }}
           path: out/*/
+          retention-days: 3

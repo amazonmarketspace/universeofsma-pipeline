@@ -101,6 +101,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--format", choices=["long", "short"], default="long")
     ap.add_argument("--seconds", type=float, default=55.0)
+    ap.add_argument("--max-shorts", type=int, default=8,
+                    help="Max number of Shorts to render (default: all)")
     a = ap.parse_args()
 
     d = sorted((ROOT / "out").glob("*/manifest.json"))[-1].parent
@@ -157,8 +159,10 @@ def main():
         print(f"\n✅ long-form -> {out}  ({dur_of(out):.0f}s)")
 
     else:
-        for i, p in enumerate(ps, 1):
-            print(f"Rendering short {i}/{len(ps)}: {p['name']}")
+        max_s = getattr(a, 'max_shorts', len(ps))
+        to_render = ps[:max_s]
+        for i, p in enumerate(to_render, 1):
+            print(f"Rendering short {i}/{len(to_render)}: {p['name']}")
             base_png = work / f"s{i:03d}_base.png"
             card(p, i, len(ps), size).save(base_png)
 

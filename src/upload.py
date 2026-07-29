@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """
-Uploads rendered videos to YouTube.
-  python3 src/upload.py --privacy public
-
-Env (GitHub secrets):
-  YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN
+Uploads rendered videos to YouTube and marks sheet rows as 'done'.
+Default privacy: public
+Daily quota: 1 long + 5 Shorts (6 videos × 1,600 units = 9,600 / 10,000 limit)
 """
 import argparse, json, os, sys
 from pathlib import Path
@@ -12,28 +10,27 @@ from pathlib import Path
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from google.oauth2.service_account import Credentials as SACredentials
 
-ROOT = Path(__file__).resolve().parent.parent
-TOKEN_URI = "https://oauth2.googleapis.com/token"
+ROOT       = Path(__file__).resolve().parent.parent
+TOKEN_URI  = "https://oauth2.googleapis.com/token"
 
-# Smartphone & accessories focused tags — boosts YouTube search ranking
 BASE_TAGS = [
-    # Category
-    "smartphone accessories", "mobile accessories india", "best smartphone accessories",
-    "amazon india deals", "amazon finds india", "tech deals india",
-    # Purchase intent
-    "buy online india", "best price india", "amazon sale",
-    # Product types
-    "power bank", "fast charger", "gan charger", "wireless charger",
-    "car charger", "usb c charger", "mobile charger india",
-    # Discount / deal
-    "amazon discount", "best deals amazon", "budget tech india",
-    # Hindi search terms
-    "सस्ता मोबाइल एक्सेसरी", "अमेज़न ऑफर",
+    "best smartphone india 2026", "budget smartphone india",
+    "smartphone under 10000", "smartphone under 20000",
+    "best phone india", "android phone india", "5g phone india",
+    "best camera phone india", "smartphone review india",
+    "smartphone accessories", "mobile accessories india",
+    "best smartphone accessories", "phone accessories under 500",
+    "fast charger india", "gan charger", "power bank india",
+    "wireless charger india", "usb c charger", "car charger india",
+    "amazon india deals", "amazon finds india", "amazon sale india",
+    "best deals amazon india", "budget tech india", "tech deals india",
+    "सस्ता स्मार्टफोन", "मोबाइल एक्सेसरी", "अमेज़न ऑफर", "बेस्ट फोन इंडिया",
 ]
 
 
-def yt():
+def yt_client():
     for k in ("YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN"):
         if not os.environ.get(k):
             sys.exit(f"{k} not set")
@@ -47,28 +44,57 @@ def yt():
     return build("youtube", "v3", credentials=creds)
 
 
-def latest():
-    ds = sorted((ROOT / "out").glob("*/manifest.json"))
-    if not ds:
-        sys.exit("Nothing rendered.")
-    return ds[-1].parent
+def sheets_client():
+    """Returns Sheets service for marking rows done after upload."""
+    raw = os.environ.get("GOOGLE_CREDS")
+    if not raw:
+        return None
+    creds = SACredentials.from_service_account_info(
+        json.loads(raw),
+        scopes=["https://www.googleapis.com/auth/spreadsheets"])
+    return build("sheets", "v4", credentials=creds).spreadsheets()
+
+
+def mark_done(rows_info: dict, sheets):
+    """Mark rows as done in the sheet after successful upload."""
+    if not sheets or not rows_info:
+        return
+    col    = rows_info.get("status_col")
+    tab    = rows_info.get("tab", "Sheet1")
+    rownums = rows_info.get("rows", [])
+    sheet_id = os.environ.get("GSHEET_ID")
+    if not col or not rownums or not sheet_id:
+        return
+    sheets.values().batchUpdate(
+        spreadsheetId=sheet_id,
+        body={
+            "valueInputOption": "RAW",
+            "data": [{"range": f"{tab}!{col}{r}", "values": [["done"]]}
+                     for r in rownums]
+        }
+    ).execute()
+    print(f"Marked rows {rownums} → done")
 
 
 def product_tags(p: dict) -> list:
-    """Generate product-specific tags from product data."""
-    tags = []
-    # Brand tag
-    tags.append(p.get("brand", "").lower())
-    # Product name words
+    tags = [p.get("brand", "").lower()]
     name_words = p.get("name", "").lower().replace("-", " ").split()
     tags.extend([w for w in name_words if len(w) > 3][:4])
-    # Category
     tags.append(p.get("category", ""))
-    # Discount tag
     if p.get("discount", 0) >= 50:
         tags.append(f"{p['discount']}% off amazon")
     tags.append(f"rs {int(p.get('price', 0))} india")
     return [t for t in tags if t]
+
+
+def dedup(tags):
+    seen, out = set(), []
+    for t in tags:
+        t = t.strip()
+        if t and t.lower() not in seen:
+            seen.add(t.lower())
+            out.append(t)
+    return out
 
 
 def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
@@ -76,9 +102,9 @@ def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
         "snippet": {
             "title": title[:100],
             "description": desc[:4900],
-            "tags": tags[:30],          # YouTube allows up to 500 chars total
-            "categoryId": "28",         # Science & Technology
-            "defaultLanguage": "hi",    # Hindi narration
+            "tags": tags[:30],
+            "categoryId": "28",
+            "defaultLanguage": "hi",
             "defaultAudioLanguage": "hi",
         },
         "status": {
@@ -98,48 +124,45 @@ def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
     return vid
 
 
+def latest():
+    ds = sorted((ROOT / "out").glob("*/manifest.json"))
+    if not ds:
+        sys.exit("Nothing rendered.")
+    return ds[-1].parent
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--privacy", default="public",
-                    choices=["private", "unlisted", "public"])
+    ap.add_argument("--privacy",   default="public",
+                    choices=["private","unlisted","public"])
+    ap.add_argument("--max-long",  type=int, default=1)
+    ap.add_argument("--max-short", type=int, default=5)
     ap.add_argument("--shorts-only", action="store_true")
-    ap.add_argument("--max-long", type=int, default=5,
-                    help="Max long-form videos to upload per run")
-    ap.add_argument("--max-short", type=int, default=5,
-                    help="Max Shorts to upload per run")
     a = ap.parse_args()
 
-    d = latest()
-    ps = json.loads((d / "manifest.json").read_text())
+    d   = latest()
+    ps  = json.loads((d / "manifest.json").read_text())
     desc = (d / "description.txt").read_text()
-    svc = yt()
+    svc  = yt_client()
+    sheets = sheets_client()
+
+    # Load row tracking info written by from_sheet.py
+    rows_file = ROOT / "data" / ".current_rows.json"
+    rows_info = json.loads(rows_file.read_text()) if rows_file.exists() else {}
 
     top = max(p["discount"] for p in ps)
+    uploaded = 0
 
-    # Upload long-form (up to --max-long, default 5)
-    if not a.shorts_only and (d / "long.mp4").exists():
-        title = (
-            f"Top {len(ps)} Smartphone Accessories on Amazon India "
-            f"| Up to {top}% Off | Best Deals {{}}"
-        ).format("2026")[:100]
-
-        # Combine base tags + product-specific tags
-        all_tags = BASE_TAGS.copy()
-        for p in ps:
-            all_tags.extend(product_tags(p))
-        # Deduplicate, keep order
-        seen = set()
-        unique_tags = []
-        for t in all_tags:
-            t = t.strip()
-            if t and t.lower() not in seen:
-                seen.add(t.lower())
-                unique_tags.append(t)
-
+    # --- Long-form ---
+    if not a.shorts_only and (d / "long.mp4").exists() and uploaded < a.max_long:
+        title = (f"Top {len(ps)} Smartphones & Accessories on Amazon India "
+                 f"| Up to {top}% Off | Best Deals 2026")[:100]
+        all_tags = dedup(BASE_TAGS + [t for p in ps for t in product_tags(p)])
         print("Uploading long-form video...")
-        push(svc, d / "long.mp4", title, desc, unique_tags[:30], a.privacy)
+        push(svc, d / "long.mp4", title, desc, all_tags[:30], a.privacy)
+        uploaded += 1
 
-    # Upload Shorts (up to --max-short, default 5)
+    # --- Shorts ---
     count = 0
     for i, p in enumerate(ps, 1):
         if count >= a.max_short:
@@ -147,8 +170,8 @@ def main():
         f = d / f"short_{i:02d}.mp4"
         if not f.exists():
             continue
-
-        st = f"{p['brand']} {p['name']} - ₹{int(p['price'])} | {p['discount']}% Off Amazon #shorts"[:100]
+        st = (f"{p['brand']} {p['name']} - "
+              f"₹{int(p['price'])} | {p['discount']}% Off | #shorts")[:100]
         sd = (
             f"{p['hook']}\n\n"
             f"✅ {p['name']}\n"
@@ -159,22 +182,17 @@ def main():
             f"#shorts #amazonfinds #smartphoneaccessories #techdeals #india "
             f"#{p['brand'].lower().replace(' ','')} #mobilegadgets #amazonsale"
         )
-
-        short_tags = BASE_TAGS[:10] + product_tags(p) + [
+        short_tags = dedup(BASE_TAGS[:10] + product_tags(p) + [
             "shorts", "youtube shorts", "tech shorts india",
             "amazon shorts", "mobile accessories shorts"
-        ]
-        seen2 = set()
-        unique_short_tags = []
-        for t in short_tags:
-            t = t.strip()
-            if t and t.lower() not in seen2:
-                seen2.add(t.lower())
-                unique_short_tags.append(t)
-
+        ])
         print(f"Uploading Short {i}: {p['name'][:40]}...")
-        push(svc, f, st, sd, unique_short_tags[:30], a.privacy)
+        push(svc, f, st, sd, short_tags[:30], a.privacy)
         count += 1
+
+    # --- Mark rows done AFTER all uploads succeed ---
+    mark_done(rows_info, sheets)
+    print(f"\n✅ Upload complete. {uploaded} long + {count} Shorts published.")
 
 
 if __name__ == "__main__":

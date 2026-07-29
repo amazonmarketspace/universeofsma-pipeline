@@ -12,16 +12,11 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
 
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu
+      - name: Install system deps
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu
 
-      - run: pip install pyyaml pillow edge-tts google-api-python-client google-auth-oauthlib
-
-      - name: Reset any in_progress rows to ready
-        env:
-          GSHEET_ID: ${{ secrets.GSHEET_ID }}
-          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
-          GSHEET_TAB: "Sheet1"
-        run: python3 src/reset_sheet.py || true
+      - name: Install Python deps
+        run: pip install pyyaml pillow edge-tts google-api-python-client google-auth-oauthlib
 
       - name: Pull products from Google Sheet
         env:
@@ -30,7 +25,8 @@ jobs:
           GSHEET_TAB: "Sheet1"
         run: python3 src/from_sheet.py
 
-      - run: python3 src/build.py
+      - name: Build affiliate links and scripts
+        run: python3 src/build.py
 
       - name: Generate Hindi narration
         run: python3 src/narrate.py
@@ -41,11 +37,14 @@ jobs:
       - name: Render 5 Shorts
         run: python3 src/render.py --format short --max-shorts 5
 
-      - name: Upload to YouTube (public, 1 long + 5 Shorts)
+      - name: Upload to YouTube and mark rows done
         env:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+          GSHEET_TAB: "Sheet1"
         run: python3 src/upload.py --privacy public --max-long 1 --max-short 5
 
       - uses: actions/upload-artifact@v4

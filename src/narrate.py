@@ -1,47 +1,64 @@
 #!/usr/bin/env python3
 """
-Generates Hindi voiceover per card with edge-tts (free, no API key).
-  pip install edge-tts
-  python3 src/narrate.py
-Writes out/<date>/audio/NN.wav and short_NN.wav
-
-Voice: hi-IN-SwaraNeural  - Female, Hindi, Indian
-Speed: +28% faster than default
-Language: Hindi narration, English display cards
+Generates Hindi voiceover per card with edge-tts.
+Voice: hi-IN-SwaraNeural (Female, Hindi, Indian)
+Speed: +28%
+Category: Smartphones and smartphone accessories
 """
 import asyncio, json, sys, subprocess
 from pathlib import Path
 
-VOICE = "hi-IN-SwaraNeural"   # Female Hindi Indian voice
-RATE  = "+28%"                 # 20% faster than default (+8%)
+VOICE = "hi-IN-SwaraNeural"
+RATE  = "+28%"
 ROOT  = Path(__file__).resolve().parent.parent
+
+# Category-aware intro hooks
+CATEGORY_INTROS = {
+    "smartphone": "यह स्मार्टफोन है",
+    "phone": "यह स्मार्टफोन है",
+    "charger": "यह एक शानदार चार्जर है",
+    "powerbank": "यह पावर बैंक है",
+    "car": "यह कार चार्जर है",
+    "cable": "यह केबल है",
+    "earphone": "यह ईयरफोन है",
+    "case": "यह फोन केस है",
+    "default": "यह प्रोडक्ट है",
+}
+
+
+def category_intro(p: dict) -> str:
+    cat = p.get("category", "").lower()
+    for key, intro in CATEGORY_INTROS.items():
+        if key in cat:
+            return intro
+    return CATEGORY_INTROS["default"]
 
 
 def line_long_hi(p, i, n):
-    """Hindi narration script for long-form card."""
     d = ""
     if p.get("discount"):
-        d = f" इसकी कीमत {int(p['mrp'])} से घटकर {int(p['price'])} रुपये हो गई है, यानी {p['discount']} प्रतिशत की छूट।"
+        d = (f" इसकी असली कीमत {int(p['mrp'])} रुपये थी, "
+             f"अब सिर्फ {int(p['price'])} रुपये में मिल रहा है — "
+             f"यानी {p['discount']} प्रतिशत की छूट।")
     return (
         f"नंबर {i}। {p['brand']} का {p['name']}। "
         f"{p['hook']}। "
         f"{p['feature_1']}। "
         f"{p['feature_2']}। "
-        f"{p['feature_3']}। "
-        f"कीमत {int(p['price'])} रुपये।{d} "
+        f"{p['feature_3']}।"
+        f"{d} "
         f"{p['verdict']}।"
     )
 
 
 def line_short_hi(p):
-    """Hindi narration for Shorts."""
     d = f", {p['discount']} प्रतिशत की छूट" if p.get("discount") else ""
     return (
         f"{p['hook']}। "
-        f"{p['brand']} का {p['name']}। "
+        f"{p['brand']} {p['name']}। "
         f"{p['feature_1']}। "
         f"कीमत सिर्फ {int(p['price'])} रुपये{d}। "
-        f"लिंक description में है।"
+        f"Description में लिंक है।"
     )
 
 
@@ -64,7 +81,7 @@ async def main():
     for i, p in enumerate(ps, 1):
         await say(line_long_hi(p, i, len(ps)), d / "audio" / f"{i:02d}.wav")
         await say(line_short_hi(p), d / "audio" / f"short_{i:02d}.wav")
-        print(f"narrated {i}/{len(ps)}")
+        print(f"narrated {i}/{len(ps)}: {p['name']}")
 
 
 if __name__ == "__main__":

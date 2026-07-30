@@ -14,19 +14,27 @@ from google.oauth2.service_account import Credentials as SACredentials
 
 ROOT       = Path(__file__).resolve().parent.parent
 TOKEN_URI  = "https://oauth2.googleapis.com/token"
-
 BASE_TAGS = [
-    "best smartphone india 2026", "budget smartphone india",
-    "smartphone under 10000", "smartphone under 20000",
-    "best phone india", "android phone india", "5g phone india",
-    "best camera phone india", "smartphone review india",
-    "smartphone accessories", "mobile accessories india",
-    "best smartphone accessories", "phone accessories under 500",
-    "fast charger india", "gan charger", "power bank india",
-    "wireless charger india", "usb c charger", "car charger india",
-    "amazon india deals", "amazon finds india", "amazon sale india",
-    "best deals amazon india", "budget tech india", "tech deals india",
-    "सस्ता स्मार्टफोन", "मोबाइल एक्सेसरी", "अमेज़न ऑफर", "बेस्ट फोन इंडिया",
+    "best smartphone india 2026",
+    "budget smartphone india",
+    "smartphone under 10000",
+    "smartphone under 20000",
+    "best phone india",
+    "android phone india",
+    "5g phone india",
+    "best camera phone india",
+    "smartphone accessories",
+    "mobile accessories india",
+    "best smartphone accessories",
+    "fast charger india",
+    "power bank india",
+    "wireless charger india",
+    "amazon india deals",
+    "amazon finds india",
+    "amazon sale india",
+    "best deals amazon india",
+    "budget tech india",
+    "tech deals india",
 ]
 
 

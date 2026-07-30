@@ -1,0 +1,596 @@
+[
+  {
+    "id": 1,
+    "name": "UniverseOfSmartPluto",
+    "gcp_project": "universeofsma-smartphones",
+    "category": "Smartphones & Accessories"
+  },
+  {
+    "id": 2,
+    "name": "StylePicksIndia",
+    "gcp_project": "stylepicks-india",
+    "category": "Apparel & Clothing"
+  },
+  {
+    "id": 3,
+    "name": "ShoesPicksIndia",
+    "gcp_project": "shoespicks-india",
+    "category": "Shoes & Footwear"
+  },
+  {
+    "id": 4,
+    "name": "BagPicksIndia",
+    "gcp_project": "bagpicks-india",
+    "category": "Handbags & Clutches"
+  },
+  {
+    "id": 5,
+    "name": "JewelPicksIndia",
+    "gcp_project": "jewelpicks-india",
+    "category": "Jewellery"
+  },
+  {
+    "id": 6,
+    "name": "WatchPicksIndia",
+    "gcp_project": "watchpicks-india",
+    "category": "Watches"
+  },
+  {
+    "id": 7,
+    "name": "TravelPicksIndia",
+    "gcp_project": "travelpicks-india",
+    "category": "Luggage & Bags"
+  },
+  {
+    "id": 8,
+    "name": "EyePicksIndia",
+    "gcp_project": "eyepicks-india",
+    "category": "Sunglasses & Eyewear"
+  },
+  {
+    "id": 9,
+    "name": "BabyStyleIndia",
+    "gcp_project": "babystyle-india",
+    "category": "Baby Apparel"
+  },
+  {
+    "id": 10,
+    "name": "KidsStyleIndia",
+    "gcp_project": "kidsstyle-india",
+    "category": "Kids Clothing"
+  },
+  {
+    "id": 11,
+    "name": "SportsWearIndia",
+    "gcp_project": "sportswear-india",
+    "category": "Sports Apparel"
+  },
+  {
+    "id": 12,
+    "name": "FurniturePicksIndia",
+    "gcp_project": "furniturepicks-india",
+    "category": "Furniture"
+  },
+  {
+    "id": 13,
+    "name": "HomeDekorIndia",
+    "gcp_project": "homedekor-india",
+    "category": "Home D\u00e9cor"
+  },
+  {
+    "id": 14,
+    "name": "BedPicksIndia",
+    "gcp_project": "bedpicks-india",
+    "category": "Bedding & Linen"
+  },
+  {
+    "id": 15,
+    "name": "LightPicksIndia",
+    "gcp_project": "lightpicks-india",
+    "category": "Lighting"
+  },
+  {
+    "id": 16,
+    "name": "BathPicksIndia",
+    "gcp_project": "bathpicks-india",
+    "category": "Bathroom Accessories"
+  },
+  {
+    "id": 17,
+    "name": "KitchenStoreIndia",
+    "gcp_project": "kitchenstore-india",
+    "category": "Kitchen Storage"
+  },
+  {
+    "id": 18,
+    "name": "RugPicksIndia",
+    "gcp_project": "rugpicks-india",
+    "category": "Carpets & Rugs"
+  },
+  {
+    "id": 19,
+    "name": "WallArtIndia",
+    "gcp_project": "wallart-india",
+    "category": "Wall Art & Paintings"
+  },
+  {
+    "id": 20,
+    "name": "GardenPicksIndia",
+    "gcp_project": "gardenpicks-india",
+    "category": "Garden & Outdoor"
+  },
+  {
+    "id": 21,
+    "name": "CurtainPicksIndia",
+    "gcp_project": "curtainpicks-india",
+    "category": "Curtains & Blinds"
+  },
+  {
+    "id": 22,
+    "name": "KitchenApplIndia",
+    "gcp_project": "kitchenappl-india",
+    "category": "Kitchen Appliances"
+  },
+  {
+    "id": 23,
+    "name": "CookPicksIndia",
+    "gcp_project": "cookpicks-india",
+    "category": "Cookware & Bakeware"
+  },
+  {
+    "id": 24,
+    "name": "DinePicksIndia",
+    "gcp_project": "dinepicks-india",
+    "category": "Dining & Tableware"
+  },
+  {
+    "id": 25,
+    "name": "GadgetKitchenIndia",
+    "gcp_project": "gadgetkitchen-india",
+    "category": "Small Kitchen Gadgets"
+  },
+  {
+    "id": 26,
+    "name": "FoodStoreIndia",
+    "gcp_project": "foodstore-india",
+    "category": "Food Storage"
+  },
+  {
+    "id": 27,
+    "name": "CleanPicksIndia",
+    "gcp_project": "cleanpicks-india",
+    "category": "Cleaning Supplies"
+  },
+  {
+    "id": 28,
+    "name": "BeautyApplIndia",
+    "gcp_project": "beautyappl-india",
+    "category": "Personal Care Appliances"
+  },
+  {
+    "id": 29,
+    "name": "HairPicksIndia",
+    "gcp_project": "hairpicks-india",
+    "category": "Hair Care Tools"
+  },
+  {
+    "id": 30,
+    "name": "SkinPicksIndia",
+    "gcp_project": "skinpicks-india",
+    "category": "Skincare Devices"
+  },
+  {
+    "id": 31,
+    "name": "BabyPicksIndia",
+    "gcp_project": "babypicks-india",
+    "category": "Baby Products"
+  },
+  {
+    "id": 32,
+    "name": "ToyPicksIndia",
+    "gcp_project": "toypicks-india",
+    "category": "Toys & Games"
+  },
+  {
+    "id": 33,
+    "name": "BoardGameIndia",
+    "gcp_project": "boardgame-india",
+    "category": "Board Games"
+  },
+  {
+    "id": 34,
+    "name": "OutdoorPlayIndia",
+    "gcp_project": "outdoorplay-india",
+    "category": "Outdoor Play"
+  },
+  {
+    "id": 35,
+    "name": "CraftPicksIndia",
+    "gcp_project": "craftpicks-india",
+    "category": "Art & Craft Supplies"
+  },
+  {
+    "id": 36,
+    "name": "MusicPicksIndia",
+    "gcp_project": "musicpicks-india",
+    "category": "Musical Instruments"
+  },
+  {
+    "id": 37,
+    "name": "SportPicksIndia",
+    "gcp_project": "sportpicks-india",
+    "category": "Sports Equipment"
+  },
+  {
+    "id": 38,
+    "name": "FitPicksIndia",
+    "gcp_project": "fitpicks-india",
+    "category": "Fitness Equipment"
+  },
+  {
+    "id": 39,
+    "name": "YogaPicksIndia",
+    "gcp_project": "yogapicks-india",
+    "category": "Yoga & Pilates"
+  },
+  {
+    "id": 40,
+    "name": "CyclePicksIndia",
+    "gcp_project": "cyclepicks-india",
+    "category": "Cycling Accessories"
+  },
+  {
+    "id": 41,
+    "name": "CampPicksIndia",
+    "gcp_project": "camppicks-india",
+    "category": "Camping & Hiking"
+  },
+  {
+    "id": 42,
+    "name": "SwimPicksIndia",
+    "gcp_project": "swimpicks-india",
+    "category": "Swimming Accessories"
+  },
+  {
+    "id": 43,
+    "name": "CricketPicksIndia",
+    "gcp_project": "cricketpicks-india",
+    "category": "Cricket Equipment"
+  },
+  {
+    "id": 44,
+    "name": "BadmintonPicksIndia",
+    "gcp_project": "badmintonpicks-india",
+    "category": "Badminton Equipment"
+  },
+  {
+    "id": 45,
+    "name": "PetPicksIndia",
+    "gcp_project": "petpicks-india",
+    "category": "Pet Supplies"
+  },
+  {
+    "id": 46,
+    "name": "PetFoodIndia",
+    "gcp_project": "petfood-india",
+    "category": "Pet Food"
+  },
+  {
+    "id": 47,
+    "name": "StationeryIndia",
+    "gcp_project": "stationery-india",
+    "category": "Stationery & Office"
+  },
+  {
+    "id": 48,
+    "name": "SchoolPicksIndia",
+    "gcp_project": "schoolpicks-india",
+    "category": "School Supplies"
+  },
+  {
+    "id": 49,
+    "name": "BookPicksIndia",
+    "gcp_project": "bookpicks-india",
+    "category": "Books"
+  },
+  {
+    "id": 50,
+    "name": "HealthPicksIndia",
+    "gcp_project": "healthpicks-india",
+    "category": "Health & Wellness"
+  },
+  {
+    "id": 51,
+    "name": "SupplementsIndia",
+    "gcp_project": "supplements-india",
+    "category": "Vitamins & Supplements"
+  },
+  {
+    "id": 52,
+    "name": "CarPicksIndia",
+    "gcp_project": "carpicks-india",
+    "category": "Car Accessories"
+  },
+  {
+    "id": 53,
+    "name": "CarElecIndia",
+    "gcp_project": "carelec-india",
+    "category": "Car Electronics"
+  },
+  {
+    "id": 54,
+    "name": "AutoToolsIndia",
+    "gcp_project": "autotools-india",
+    "category": "Automotive Tools"
+  },
+  {
+    "id": 55,
+    "name": "BikePicksIndia",
+    "gcp_project": "bikepicks-india",
+    "category": "Bike Accessories"
+  },
+  {
+    "id": 56,
+    "name": "PowerToolsIndia",
+    "gcp_project": "powertools-india",
+    "category": "Power Tools"
+  },
+  {
+    "id": 57,
+    "name": "HandToolsIndia",
+    "gcp_project": "handtools-india",
+    "category": "Hand Tools"
+  },
+  {
+    "id": 58,
+    "name": "SafetyPicksIndia",
+    "gcp_project": "safetypicks-india",
+    "category": "Safety & Security"
+  },
+  {
+    "id": 59,
+    "name": "ElecPicksIndia",
+    "gcp_project": "elecpicks-india",
+    "category": "Electrical Supplies"
+  },
+  {
+    "id": 60,
+    "name": "PlumbPicksIndia",
+    "gcp_project": "plumbpicks-india",
+    "category": "Plumbing Supplies"
+  },
+  {
+    "id": 61,
+    "name": "HardwarePicksIndia",
+    "gcp_project": "hardwarepicks-india",
+    "category": "Hardware & Fasteners"
+  },
+  {
+    "id": 62,
+    "name": "AudioPicksIndia",
+    "gcp_project": "audiopicks-india",
+    "category": "Headphones & Earphones"
+  },
+  {
+    "id": 63,
+    "name": "SpeakerPicksIndia",
+    "gcp_project": "speakerpicks-india",
+    "category": "Speakers & Sound"
+  },
+  {
+    "id": 64,
+    "name": "SmartHomeIndia",
+    "gcp_project": "smarthome-india",
+    "category": "Smart Home Devices"
+  },
+  {
+    "id": 65,
+    "name": "WearPicksIndia",
+    "gcp_project": "wearpicks-india",
+    "category": "Wearables & Smartwatches"
+  },
+  {
+    "id": 66,
+    "name": "TabletPicksIndia",
+    "gcp_project": "tabletpicks-india",
+    "category": "Tablets"
+  },
+  {
+    "id": 67,
+    "name": "LaptopAccIndia",
+    "gcp_project": "laptopacc-india",
+    "category": "Laptop Accessories"
+  },
+  {
+    "id": 68,
+    "name": "PCGamingIndia",
+    "gcp_project": "pcgaming-india",
+    "category": "PC Gaming"
+  },
+  {
+    "id": 69,
+    "name": "GameAccIndia",
+    "gcp_project": "gameacc-india",
+    "category": "Gaming Accessories"
+  },
+  {
+    "id": 70,
+    "name": "CamPicksIndia",
+    "gcp_project": "campicks-india",
+    "category": "Cameras & Photography"
+  },
+  {
+    "id": 71,
+    "name": "CamAccIndia",
+    "gcp_project": "camacc-india",
+    "category": "Camera Accessories"
+  },
+  {
+    "id": 72,
+    "name": "PrintPicksIndia",
+    "gcp_project": "printpicks-india",
+    "category": "Printers & Ink"
+  },
+  {
+    "id": 73,
+    "name": "NetPicksIndia",
+    "gcp_project": "netpicks-india",
+    "category": "Networking & WiFi"
+  },
+  {
+    "id": 74,
+    "name": "StoragePicksIndia",
+    "gcp_project": "storagepicks-india",
+    "category": "Storage Devices"
+  },
+  {
+    "id": 75,
+    "name": "PeriphPicksIndia",
+    "gcp_project": "periphpicks-india",
+    "category": "Computer Peripherals"
+  },
+  {
+    "id": 76,
+    "name": "TVPicksIndia",
+    "gcp_project": "tvpicks-india",
+    "category": "TV & Home Theatre"
+  },
+  {
+    "id": 77,
+    "name": "ACPicksIndia",
+    "gcp_project": "acpicks-india",
+    "category": "Air Conditioners"
+  },
+  {
+    "id": 78,
+    "name": "WashPicksIndia",
+    "gcp_project": "washpicks-india",
+    "category": "Washing Machines"
+  },
+  {
+    "id": 79,
+    "name": "FridgePicksIndia",
+    "gcp_project": "fridgepicks-india",
+    "category": "Refrigerators"
+  },
+  {
+    "id": 80,
+    "name": "MicroPicksIndia",
+    "gcp_project": "micropicks-india",
+    "category": "Microwaves & OTG"
+  },
+  {
+    "id": 81,
+    "name": "VacuumPicksIndia",
+    "gcp_project": "vacuumpicks-india",
+    "category": "Vacuum Cleaners"
+  },
+  {
+    "id": 82,
+    "name": "CasePicksIndia",
+    "gcp_project": "casepicks-india",
+    "category": "Mobile Cases & Covers"
+  },
+  {
+    "id": 83,
+    "name": "ScreenPicksIndia",
+    "gcp_project": "screenpicks-india",
+    "category": "Screen Protectors"
+  },
+  {
+    "id": 84,
+    "name": "ChargePicksIndia",
+    "gcp_project": "chargepicks-india",
+    "category": "Power Banks & Chargers"
+  },
+  {
+    "id": 85,
+    "name": "BudgetTVIndia",
+    "gcp_project": "budgettv-india",
+    "category": "Smart TVs Under 20K"
+  },
+  {
+    "id": 86,
+    "name": "BudgetLaptopIndia",
+    "gcp_project": "budgetlaptop-india",
+    "category": "Budget Laptops"
+  },
+  {
+    "id": 87,
+    "name": "EarbudPicksIndia",
+    "gcp_project": "earbudpicks-india",
+    "category": "Earbuds Under 2000"
+  },
+  {
+    "id": 88,
+    "name": "GroomPicksIndia",
+    "gcp_project": "groompicks-india",
+    "category": "Grooming & Shaving"
+  },
+  {
+    "id": 89,
+    "name": "PerfumePicksIndia",
+    "gcp_project": "perfumepicks-india",
+    "category": "Perfumes & Fragrances"
+  },
+  {
+    "id": 90,
+    "name": "MenGroomIndia",
+    "gcp_project": "mengroom-india",
+    "category": "Men's Grooming"
+  },
+  {
+    "id": 91,
+    "name": "GroceryPicksIndia",
+    "gcp_project": "grocerypicks-india",
+    "category": "Grocery & Gourmet"
+  },
+  {
+    "id": 92,
+    "name": "OrganicPicksIndia",
+    "gcp_project": "organicpicks-india",
+    "category": "Organic & Natural Foods"
+  },
+  {
+    "id": 93,
+    "name": "DryFruitIndia",
+    "gcp_project": "dryfruit-india",
+    "category": "Dry Fruits & Nuts"
+  },
+  {
+    "id": 94,
+    "name": "TeaPicksIndia",
+    "gcp_project": "teapicks-india",
+    "category": "Tea & Coffee"
+  },
+  {
+    "id": 95,
+    "name": "SnackPicksIndia",
+    "gcp_project": "snackpicks-india",
+    "category": "Snacks & Beverages"
+  },
+  {
+    "id": 96,
+    "name": "AmazonDeviceIndia",
+    "gcp_project": "amazondevice-india",
+    "category": "Amazon Devices"
+  },
+  {
+    "id": 97,
+    "name": "KindlePicksIndia",
+    "gcp_project": "kindlepicks-india",
+    "category": "Kindle & eBooks"
+  },
+  {
+    "id": 98,
+    "name": "PantryPicksIndia",
+    "gcp_project": "pantrypicks-india",
+    "category": "Amazon Pantry Deals"
+  },
+  {
+    "id": 99,
+    "name": "DailyDealsIndia",
+    "gcp_project": "dailydeals-india",
+    "category": "Daily & Lightning Deals"
+  }
+]

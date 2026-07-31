@@ -193,9 +193,16 @@ def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
     media = MediaFileUpload(str(path), chunksize=-1, resumable=True,
                             mimetype="video/mp4")
     req = svc.videos().insert(part="snippet,status", body=body, media_body=media)
-    res = None
-    while res is None:
-        _, res = req.next_chunk()
+    try:
+        res = None
+        while res is None:
+            _, res = req.next_chunk()
+    except Exception as e:
+        err_str = str(e)
+        if 'uploadLimitExceeded' in err_str:
+            print(f"  ⚠ YouTube daily upload limit reached - will retry tomorrow at 8am IST")
+            sys.exit(0)  # exit cleanly so rows aren't marked done but pipeline doesn't fail
+        raise
     vid = res["id"]
     print(f"  https://youtu.be/{vid}  [{privacy}]")
     return vid

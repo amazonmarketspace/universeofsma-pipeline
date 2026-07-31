@@ -85,13 +85,42 @@ def mark_done(rows_info: dict, sheets):
 
 
 def product_tags(p: dict) -> list:
-    tags = [p.get("brand", "").lower()]
-    name_words = p.get("name", "").lower().replace("-", " ").split()
-    tags.extend([w for w in name_words if len(w) > 3][:4])
-    tags.append(p.get("category", ""))
+    INVALID = set('/\\\\,|<>&"\';:()[]{}@#%^*+=~`')
+
+    def clean(word: str) -> str | None:
+        """Return word if valid YouTube tag word, else None."""
+        w = word.strip().lower()
+        if not w or len(w) < 3:
+            return None
+        if any(c in INVALID for c in w):
+            return None
+        if any(ord(c) > 127 for c in w):
+            return None
+        # Skip pure numbers or version codes like "3.3ft" "1m"
+        if w.replace('.', '').replace('m', '').replace('ft', '').isdigit():
+            return None
+        # Skip tokens that look like model codes (mix of letters+digits, short)
+        if len(w) <= 5 and any(c.isdigit() for c in w):
+            return None
+        return w
+
+    tags = []
+    brand = clean(p.get("brand", ""))
+    if brand:
+        tags.append(brand)
+    # Only take clean words from name
+    name_words = p.get("name", "").lower().replace("-", " ").replace("/", " ").split()
+    clean_words = [c for w in name_words if (c := clean(w))]
+    tags.extend(clean_words[:4])
+    cat = clean(p.get("category", ""))
+    if cat:
+        tags.append(cat)
     if p.get("discount", 0) >= 50:
         tags.append(f"{p['discount']}% off amazon")
-    tags.append(f"rs {int(p.get('price', 0))} india")
+    try:
+        tags.append(f"rs {int(p.get('price', 0))} india")
+    except (ValueError, TypeError):
+        pass
     return [t for t in tags if t]
 
 

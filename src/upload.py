@@ -233,9 +233,11 @@ def main():
     # --- Long-form ---
     if not a.shorts_only and (d / "long.mp4").exists() and uploaded < a.max_long:
         title = make_long_title(ps)
-        all_tags = dedup(BASE_TAGS + [t for p in ps for t in product_tags(p)])
+        # Use only BASE_TAGS - dynamic product tags cause invalidTags 400 errors
+        safe_base_tags = [t.encode('ascii','ignore').decode('ascii').strip()
+                          for t in BASE_TAGS if t.encode('ascii','ignore').decode('ascii').strip()]
         print("Uploading long-form video...")
-        push(svc, d / "long.mp4", title, desc, all_tags[:30], a.privacy)
+        push(svc, d / "long.mp4", title, desc, safe_base_tags[:20], a.privacy)
         uploaded += 1
 
     # --- Shorts ---
@@ -257,10 +259,9 @@ def main():
             f"#shorts #amazonfinds #smartphoneaccessories #techdeals #india "
             f"#{p['brand'].lower().replace(' ','')} #mobilegadgets #amazonsale"
         )
-        short_tags = dedup(BASE_TAGS[:10] + product_tags(p) + [
-            "shorts", "youtube shorts", "tech shorts india",
-            "amazon shorts", "mobile accessories shorts"
-        ])
+        short_tags = [t.encode('ascii','ignore').decode('ascii').strip()
+                      for t in BASE_TAGS[:15] + ["shorts", "youtube shorts", "tech shorts india"]
+                      if t.encode('ascii','ignore').decode('ascii').strip()]
         print(f"Uploading Short {i}: {p['name'][:40]}...")
         push(svc, f, st, sd, short_tags[:30], a.privacy)
         count += 1

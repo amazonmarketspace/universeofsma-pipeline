@@ -2,7 +2,7 @@
 """
 Uploads rendered videos to YouTube and marks sheet rows as 'done'.
 Default privacy: public
-Daily quota: 1 long + 5 Shorts (6 videos × 1,600 units = 9,600 / 10,000 limit)
+Daily quota: 1 long + 5 Shorts (6 videos x 1,600 units = 9,600 / 10,000 limit)
 """
 import argparse, json, os, sys
 from pathlib import Path
@@ -81,7 +81,7 @@ def mark_done(rows_info: dict, sheets):
                      for r in rownums]
         }
     ).execute()
-    print(f"Marked rows {rownums} → done")
+    print(f"Marked rows {rownums} -> done")
 
 
 def product_tags(p: dict) -> list:
@@ -179,12 +179,12 @@ def main():
         if not f.exists():
             continue
         st = (f"{p['brand']} {p['name']} - "
-              f"₹{int(p['price'])} | {p['discount']}% Off | #shorts")[:100]
+              f"Rs{int(p['price'])} | {p['discount']}% Off #shorts")[:100]
         sd = (
             f"{p['hook']}\n\n"
-            f"✅ {p['name']}\n"
-            f"💰 Price: ₹{int(p['price'])} (was ₹{int(p['mrp'])}, {p['discount']}% off)\n"
-            f"🔗 {p['url']}\n\n"
+            f"{p['name']}\n"
+            f"Price: Rs{int(p['price'])} (was Rs{int(p['mrp'])}, {p['discount']}% off)\n"
+            f"Link: {p['url']}\n\n"
             f"As an Amazon Associate I earn from qualifying purchases.\n"
             f"Prices correct at time of recording.\n\n"
             f"#shorts #amazonfinds #smartphoneaccessories #techdeals #india "
@@ -200,7 +200,7 @@ def main():
 
     # --- Mark rows done AFTER all uploads succeed ---
     mark_done(rows_info, sheets)
-    print(f"\n✅ Upload complete. {uploaded} long + {count} Shorts published.")
+    print(f"\nOK Upload complete. {uploaded} long + {count} Shorts published.")
 
 
 if __name__ == "__main__":

@@ -86,20 +86,25 @@ def mark_done(rows_info: dict, sheets):
 
 def product_tags(p: dict) -> list:
     INVALID = set('/\\\\,|<>&"\';:()[]{}@#%^*+=~`')
+    STOP = {'for','the','and','with','this','that','from','into','over','your',
+            'our','its','are','was','has','had','have','been','will','can',
+            'not','but','all','one','new','get','use','may','per','off',
+            'more','also','only','same','just','like','some','than','then',
+            'when','what','which','who','how','why','where','each','both',
+            'buy','best','deal','free','shop','save','sale','fast','good'}
 
     def clean(word: str) -> str | None:
-        """Return word if valid YouTube tag word, else None."""
         w = word.strip().lower()
-        if not w or len(w) < 3:
+        if not w or len(w) < 4:
+            return None
+        if w in STOP:
             return None
         if any(c in INVALID for c in w):
             return None
         if any(ord(c) > 127 for c in w):
             return None
-        # Skip pure numbers or version codes like "3.3ft" "1m"
         if w.replace('.', '').replace('m', '').replace('ft', '').isdigit():
             return None
-        # Skip tokens that look like model codes (mix of letters+digits, short)
         if len(w) <= 5 and any(c.isdigit() for c in w):
             return None
         return w
@@ -108,7 +113,6 @@ def product_tags(p: dict) -> list:
     brand = clean(p.get("brand", ""))
     if brand:
         tags.append(brand)
-    # Only take clean words from name
     name_words = p.get("name", "").lower().replace("-", " ").replace("/", " ").split()
     clean_words = [c for w in name_words if (c := clean(w))]
     tags.extend(clean_words[:4])
@@ -218,7 +222,7 @@ def main():
 
     # --- Long-form ---
     if not a.shorts_only and (d / "long.mp4").exists() and uploaded < a.max_long:
-        title = (f"Top {len(ps)} Smartphones & Accessories on Amazon India "
+        title = (f"Top {len(ps)} Smartphones and Accessories on Amazon India "
                  f"| Up to {top}% Off | Best Deals 2026")[:100]
         all_tags = dedup(BASE_TAGS + [t for p in ps for t in product_tags(p)])
         print("Uploading long-form video...")

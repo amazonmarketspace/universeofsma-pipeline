@@ -18,6 +18,13 @@ jobs:
       - name: Install Python deps
         run: pip install pyyaml pillow edge-tts google-api-python-client google-auth-oauthlib
 
+      - name: Reset any stuck in_progress rows to ready
+        env:
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+          GSHEET_TAB: "Sheet1"
+        run: python3 src/reset_sheet.py || true
+
       - name: Scrape fresh products from Amazon India
         env:
           GSHEET_ID: ${{ secrets.GSHEET_ID }}

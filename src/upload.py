@@ -105,12 +105,36 @@ def dedup(tags):
     return out
 
 
+def sanitise_tags(tags: list) -> list:
+    """Strip tags with non-ASCII chars, commas, or angle brackets.
+    YouTube allows only ASCII letters, numbers, spaces and hyphens in tags.
+    Also enforces 500-char total limit."""
+    clean = []
+    total = 0
+    for t in tags:
+        t = t.strip()
+        # Skip if any non-ASCII character
+        if any(ord(c) > 127 for c in t):
+            continue
+        # Skip if contains chars YouTube rejects in tags
+        if any(c in t for c in ('<', '>', '&', '"', "'")):
+            continue
+        if not t:
+            continue
+        if total + len(t) > 495:
+            break
+        clean.append(t)
+        total += len(t)
+    return clean
+
+
 def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
+    safe_tags = sanitise_tags(tags)[:30]
     body = {
         "snippet": {
             "title": title[:100],
             "description": desc[:4900],
-            "tags": tags[:30],
+            "tags": safe_tags,
             "categoryId": "28",
             "defaultLanguage": "hi",
             "defaultAudioLanguage": "hi",

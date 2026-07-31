@@ -165,10 +165,13 @@ def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
     safe_tags = sanitise_tags(tags)[:30]
     print(f"  DEBUG tags ({len(safe_tags)}, {sum(len(t) for t in safe_tags)}c): {safe_tags}")
     print(f"  DEBUG title ({len(title)}c): {repr(title[:80])}")
+    # Sanitise description - remove any chars that YouTube might reject
+    safe_desc = desc[:4900].encode('ascii', 'ignore').decode('ascii')
+    print(f"  DEBUG desc chars removed: {len(desc)-len(safe_desc)}")
     body = {
         "snippet": {
             "title": title[:100],
-            "description": desc[:4900],
+            "description": safe_desc,
             "tags": safe_tags,
             "categoryId": "28",
             "defaultLanguage": "hi",

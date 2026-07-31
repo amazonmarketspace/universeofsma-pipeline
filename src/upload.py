@@ -170,7 +170,6 @@ def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
         cleaned = t.encode('ascii', 'ignore').decode('ascii').strip()
         if cleaned and len(cleaned) >= 3:
             safe_tags.append(cleaned)
-    print(f"  DEBUG tags ({len(safe_tags)}): {safe_tags[:5]}...")
     # Sanitise description - remove any chars that YouTube might reject
     safe_desc = desc[:4900].encode('ascii', 'ignore').decode('ascii')
     print(f"  DEBUG desc chars removed: {len(desc)-len(safe_desc)}")

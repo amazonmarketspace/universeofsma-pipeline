@@ -1,0 +1,18 @@
+name: reset-sheet
+on:
+  workflow_dispatch:
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install google-api-python-client google-auth-oauthlib
+      - name: Reset in_progress rows to ready
+        env:
+          GSHEET_ID: ${{ secrets.GSHEET_ID }}
+          GOOGLE_CREDS: ${{ secrets.GOOGLE_CREDS }}
+          GSHEET_TAB: "Sheet1"
+        run: python3 src/reset_sheet.py

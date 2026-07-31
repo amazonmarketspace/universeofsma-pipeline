@@ -174,8 +174,6 @@ def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
             "description": safe_desc,
             "tags": safe_tags,
             "categoryId": "28",
-            "defaultLanguage": "hi",
-            "defaultAudioLanguage": "hi",
         },
         "status": {
             "privacyStatus": privacy,

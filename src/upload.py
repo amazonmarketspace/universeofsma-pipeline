@@ -162,8 +162,8 @@ def sanitise_tags(tags: list) -> list:
 
 
 def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
-    safe_tags = sanitise_tags(tags)[:30]
-    print(f"  DEBUG tags ({len(safe_tags)}, {sum(len(t) for t in safe_tags)}c): {safe_tags}")
+    safe_tags = []  # DEBUG: trying empty tags to isolate invalidTags error
+    print(f"  DEBUG tags: EMPTY (testing)")
     print(f"  DEBUG title ({len(title)}c): {repr(title[:80])}")
     # Sanitise description - remove any chars that YouTube might reject
     safe_desc = desc[:4900].encode('ascii', 'ignore').decode('ascii')

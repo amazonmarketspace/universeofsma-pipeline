@@ -4,16 +4,20 @@ Uploads rendered videos to YouTube and marks sheet rows as 'done'.
 Default privacy: public
 Daily quota: 1 long + 5 Shorts (6 videos x 1,600 units = 9,600 / 10,000 limit)
 """
-import argparse, json, os, sys
+import argparse, json, os, sys, random
 from pathlib import Path
 
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.service_account import Credentials as SACredentials
+sys.path.insert(0, str(Path(__file__).parent))
+from titles import make_long_title, make_short_title
 
 ROOT       = Path(__file__).resolve().parent.parent
 TOKEN_URI  = "https://oauth2.googleapis.com/token"
+sys.path.insert(0, str(Path(__file__).parent))
+from titles import long_title, short_title
 BASE_TAGS = [
     "best smartphone india 2026",
     "budget smartphone india",
@@ -228,8 +232,7 @@ def main():
 
     # --- Long-form ---
     if not a.shorts_only and (d / "long.mp4").exists() and uploaded < a.max_long:
-        title = (f"Top {len(ps)} Smartphones and Accessories on Amazon India "
-                 f"| Up to {top}% Off | Best Deals 2026")[:100]
+        title = make_long_title(ps)
         all_tags = dedup(BASE_TAGS + [t for p in ps for t in product_tags(p)])
         print("Uploading long-form video...")
         push(svc, d / "long.mp4", title, desc, all_tags[:30], a.privacy)
@@ -243,8 +246,7 @@ def main():
         f = d / f"short_{i:02d}.mp4"
         if not f.exists():
             continue
-        st = (f"{p['brand']} {p['name']} - "
-              f"Rs{int(p['price'])} | {p['discount']}% Off #shorts")[:100]
+        st = make_short_title(p)
         sd = (
             f"{p['hook']}\n\n"
             f"{p['name']}\n"

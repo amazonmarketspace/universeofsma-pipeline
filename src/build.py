@@ -83,8 +83,13 @@ def build_description(ps: list[dict]) -> str:
          CFG["disclosure"], CFG["price_caveat"], "", "-- PRODUCTS --", ""]
     for n, p in enumerate(ps, 1):
         tag = f" ({p['discount']}% off)" if p["discount"] else ""
-        L += [f"{n}. {p['name']} - {CFG['currency']}{p['price']:.0f}{tag}",
-              f"   {p['url']}", ""]
+        # URL on its own blank-padded line so YouTube makes it clickable
+        L += [
+            f"{n}. {p['name']} - {CFG['currency']}{p['price']:.0f}{tag}",
+            "",
+            p["url"],
+            "",
+        ]
     L += ["-- CHAPTERS --"]
     t = 15
     for n, p in enumerate(ps, 1):

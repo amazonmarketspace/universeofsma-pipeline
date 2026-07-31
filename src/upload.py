@@ -17,7 +17,7 @@ from titles import make_long_title, make_short_title
 ROOT       = Path(__file__).resolve().parent.parent
 TOKEN_URI  = "https://oauth2.googleapis.com/token"
 sys.path.insert(0, str(Path(__file__).parent))
-from titles import long_title, short_title
+from titles import make_long_title, make_short_title
 BASE_TAGS = [
     "best smartphone india 2026",
     "budget smartphone india",

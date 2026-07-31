@@ -130,6 +130,8 @@ def sanitise_tags(tags: list) -> list:
 
 def push(svc, path: Path, title: str, desc: str, tags: list, privacy: str):
     safe_tags = sanitise_tags(tags)[:30]
+    print(f"  DEBUG tags ({len(safe_tags)}, {sum(len(t) for t in safe_tags)}c): {safe_tags}")
+    print(f"  DEBUG title ({len(title)}c): {repr(title[:80])}")
     body = {
         "snippet": {
             "title": title[:100],
